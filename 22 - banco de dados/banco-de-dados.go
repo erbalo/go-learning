@@ -1,0 +1,37 @@
+package main
+
+// si se pone linea debajo quiere decir que se va a importar pero no se usará de forma implicita
+import (
+	"database/sql"
+	"fmt"
+	"log"
+
+	_ "github.com/go-sql-driver/mysql"
+)
+
+func main() {
+	urlConexao := "erbalo:erbalo123@/learning-go?charset=utf8&parseTime=True&loc=Local"
+	db, erro := sql.Open("mysql", urlConexao)
+
+	if erro != nil {
+		log.Fatal(erro)
+	}
+
+	defer db.Close()
+
+	if erro = db.Ping(); erro != nil {
+		log.Fatal(erro)
+	}
+
+	fmt.Println("Conexao esta aberta")
+
+	linhas, erro := db.Query("select * from usuarios")
+
+	if erro != nil {
+		log.Fatal(erro)
+	}
+
+	defer linhas.Close()
+
+	fmt.Println(linhas)
+}
